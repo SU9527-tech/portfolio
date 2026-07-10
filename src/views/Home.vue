@@ -14,7 +14,7 @@
         <a class="btn btn-ghost magnetic" v-magnetic href="#contact" @click.prevent="scrollTo('contact')">联系我</a>
       </div>
       <ul class="hero-stats">
-        <li><strong>9</strong><span>个练手项目</span></li>
+        <li><strong>{{ projects.length }}</strong><span>个项目</span></li>
         <li><strong>2025–2026</strong><span>学习跨度</span></li>
         <li><strong>Vue + C#</strong><span>主攻方向</span></li>
       </ul>
@@ -61,6 +61,7 @@
 <script setup>
 import ProjectArchive from '../components/ProjectArchive.vue'
 import TagCloud from '../components/TagCloud.vue'
+import { projects } from '../data/projects'
 
 function scrollTo(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
