@@ -261,11 +261,15 @@ button:active { transform: scale(.94) }
 .counter { font-size: 13px; color: var(--text-muted); margin-top: 8px }
 .counter b { color: var(--accent) }
 .bubble-field { position: relative; height: 240px; background: var(--surface-2); border-radius: 10px; margin-top: 12px; overflow: hidden }
-.bubble { position: absolute; width: 54px; height: 54px; border-radius: 50%; cursor: pointer;
+.vent-foot { text-align: center; color: var(--text-muted); font-size: 12px; line-height: 1.7 }
+</style>
+
+<!-- 动态创建的 .bubble / .pop 节点没有 scoped 的 data-v 属性，样式必须放全局块才生效 -->
+<style>
+.vent .bubble { position: absolute; width: 54px; height: 54px; border-radius: 50%; cursor: pointer;
   background: radial-gradient(circle at 32% 30%, var(--accent-2), var(--accent)); opacity: .9;
   box-shadow: inset 0 0 10px rgba(255, 255, 255, .4); animation: float 4s ease-in-out infinite }
 @keyframes float { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-14px) } }
-.pop { position: absolute; font-size: 18px; color: var(--accent); pointer-events: none; animation: rise .8s ease-out forwards }
+.vent .pop { position: absolute; font-size: 18px; color: var(--accent); pointer-events: none; animation: rise .8s ease-out forwards }
 @keyframes rise { from { opacity: 1; transform: translateY(0) } to { opacity: 0; transform: translateY(-40px) } }
-.vent-foot { text-align: center; color: var(--text-muted); font-size: 12px; line-height: 1.7 }
 </style>
