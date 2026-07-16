@@ -10,6 +10,7 @@
         <a class="nav-link" href="#works" @click.prevent="goSection('works')">作品</a>
         <a class="nav-link" href="#about" @click.prevent="goSection('about')">关于</a>
         <a class="nav-link" href="#contact" @click.prevent="goSection('contact')">联系</a>
+        <router-link to="/vent" class="nav-link">发泄室</router-link>
       </nav>
 
       <div class="nav-actions">

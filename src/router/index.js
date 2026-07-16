@@ -1,10 +1,12 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Project from '../views/Project.vue'
+import VentRoom from '../views/VentRoom.vue'
 
 const routes = [
   { path: '/', name: 'home', component: Home },
   { path: '/project/:id', name: 'project', component: Project, props: true },
+  { path: '/vent', name: 'vent', component: VentRoom },
   { path: '/:pathMatch(.*)*', redirect: '/' },
 ]
 
