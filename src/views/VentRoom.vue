@@ -208,6 +208,7 @@ function draw(rand) {
 function hitBrick() { brickN.value++; bossN.value++; playThud() }
 
 // ---- 捏泡泡 ----
+const BUBBLE_MAX = 12
 function spawnBubbles(n) {
   const field = bubbleField.value
   if (!field) return
@@ -222,6 +223,9 @@ function spawnBubbles(n) {
       pop.style.left = b.style.left; pop.style.top = b.style.top
       field.appendChild(pop); setTimeout(() => pop.remove(), 800)
       b.remove(); playPop()
+      // 剩余少于 3 个就自动补满到初始数量
+      const left = field.querySelectorAll('.bubble').length
+      if (left < 3) spawnBubbles(BUBBLE_MAX - left)
     }
     field.appendChild(b)
   }
