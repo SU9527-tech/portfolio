@@ -228,6 +228,56 @@ a { color: inherit; text-decoration: none; }
   background: var(--accent-soft); color: var(--accent); font-weight: 600;
 }
 
+/* ---------- 作品集：筛选条 + 网格 ---------- */
+.filter-bar {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  max-width: var(--maxw); margin: 0 auto; padding: 10px 22px 6px;
+}
+.filter-chip {
+  font-size: 13px; padding: 7px 14px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--text-muted); font-weight: 600; cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.filter-chip:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+.filter-chip.active {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff; border-color: transparent;
+}
+
+.works-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(258px, 1fr));
+  gap: 16px;
+  max-width: var(--maxw); margin: 0 auto; padding: 14px 22px 8px;
+}
+
+/* 卡片改成纵向 flex，让标签和「查看详情」沉底对齐 */
+.work-card { display: flex; flex-direction: column; }
+.card-top { display: flex; justify-content: flex-end; margin-bottom: 2px; }
+.card-status {
+  font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+  letter-spacing: 0.2px;
+}
+.st-done     { background: rgba(34, 197, 94, 0.14);  color: #16a34a; }
+.st-progress { background: var(--accent-soft);        color: var(--accent); }
+.st-ongoing  { background: rgba(14, 165, 233, 0.14);  color: var(--accent-2); }
+.card-role {
+  font-size: 13px; color: var(--text-muted); font-weight: 600;
+  margin-top: 4px;
+}
+.card-excerpt { margin-top: 8px; color: var(--text-muted); font-size: 14.5px; flex: 1; }
+.card-more {
+  margin-top: 14px; align-self: flex-start;
+  font-size: 13px; font-weight: 700; color: var(--accent);
+  transition: gap 0.2s ease, opacity 0.2s ease;
+}
+.card-more:hover { opacity: 0.75; }
+
+@media (max-width: 560px) {
+  .works-grid { grid-template-columns: 1fr; }
+}
+
 /* ---------- 关于 ---------- */
 .about { padding: 56px 0 24px; }
 .about-grid { max-width: var(--maxw); margin: 0 auto; padding: 16px 22px;
