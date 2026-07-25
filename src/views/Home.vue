@@ -50,7 +50,7 @@
         <h2 class="section-title">一起聊聊？</h2>
         <p class="section-sub">有练手项目想法、学习路线交流，或者想内推 / 合作，都欢迎找我。</p>
         <div class="contact-links">
-          <a class="btn btn-primary magnetic" v-magnetic href="mailto:you@example.com">发邮件</a>
+          <a class="btn btn-primary magnetic" v-magnetic href="mailto:1840214075@qq.com">发邮件</a>
           <a class="btn btn-ghost magnetic" v-magnetic href="https://github.com/SU9527-tech" target="_blank" rel="noopener">GitHub</a>
         </div>
       </div>
