@@ -405,6 +405,45 @@ export const projects = [
       { type: 'blockquote', text: '工具类项目的价值不在代码多炫，而在于「替人省掉重复劳动」。把最机械的那一步自动化，团队就能把时间花在真正需要判断的地方。' },
     ],
   },
+  {
+    id: 'devicemonitor',
+    title: 'DeviceMonitor · 设备监控桌面应用',
+    date: '2025-09-01',
+    status: '持续更新',
+    role: '架构梳理 + 分层改造',
+    subtitle: '一个 .NET 桌面设备监控项目 —— 借它把 BLL / DAL / UI 三层架构和常用设计模式啃透',
+    highlight: '以真实项目为样本，把三层架构、依赖注入、观察者模式一步步理清，练的是「怎么把代码写规矩」。',
+    github: 'https://github.com/SU9527-tech/DeviceMonitor',
+    tags: ['.NET', 'C#', 'WPF', '架构'],
+    excerpt: '桌面设备监控练手项目：借它吃透三层架构（BLL/DAL/UI）与常用设计模式，把代码写规矩。',
+    sections: [
+      { type: 'h2', text: '1. 项目背景' },
+      { type: 'p', text: '**DeviceMonitor** 是一个 .NET 桌面设备监控应用，也是我用来「练架构」的主战场。比起堆功能，我更看重借它把 **BLL（业务逻辑）/ DAL（数据访问）/ UI（界面）** 三层边界理清，把课堂上听到的设计模式真正用出来。' },
+      { type: 'h2', text: '2. 分层结构' },
+      { type: 'ul', items: [
+        '**UI 层（WPF）**：只负责展示与交互，不写业务逻辑，靠数据绑定拿数据。',
+        '**BLL 层**：业务规则、状态判断、告警逻辑都收在这里，UI 和 DAL 都不该掺和。',
+        '**DAL 层**：只管「怎么把数据存进去、取出来」，把 SQL / 文件细节关在里面。',
+        '**Common 层**：放公共工具与模型，三层共用，避免重复。',
+      ] },
+      { type: 'h2', text: '3. 设计模式实践' },
+      { type: 'ul', items: [
+        '**观察者模式**：设备状态变化 → 自动通知界面刷新，而不是界面去轮询。',
+        '**依赖注入**：BLL 不直接 new DAL，而是从外部注入，便于替换与单测。',
+        '**单例 / 服务定位**：全局配置与日志用一个统一入口，避免到处 new。',
+      ] },
+      { type: 'h3', text: '状态变更通知（观察者雏形，C# 片段）' },
+      { type: 'code', lang: 'csharp', code: 'public class Device\n{\n    public event Action<Device, DeviceState> StateChanged;\n    private DeviceState _state;\n    public DeviceState State\n    {\n        get => _state;\n        set\n        {\n            if (_state == value) return;\n            _state = value;\n            StateChanged?.Invoke(this, value); // 通知订阅者\n        }\n    }\n}' },
+      { type: 'h2', text: '4. 难点与踩坑' },
+      { type: 'ul', items: [
+        '**层与层耦合**：一开始 UI 里直接写 SQL，改需求时牵一发动全身，后来强制「UI 不碰数据」才清爽。',
+        '**界面卡顿**：设备数据高频刷新时直接更新 UI 会卡，用 `Dispatcher` / 批量合并刷新解决。',
+        '**配置散落**：连接字符串、轮询间隔写死在代码里，抽到 `appsettings.json` 才好改。',
+      ] },
+      { type: 'h2', text: '5. 收获' },
+      { type: 'blockquote', text: '分层不是炫技，是为了「改一处不影响别处」。DeviceMonitor 让我明白：写代码先想清楚边界，比先写功能更重要。' },
+    ],
+  },
 ]
 
 export function findProject(id) {

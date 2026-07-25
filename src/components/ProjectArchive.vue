@@ -37,6 +37,7 @@ const CAT_MAP = {
   myfirstapi: 'backend',       // 第一个 Web API
   dbconn: 'backend',           // C# 连 SQL Server
   winforms: 'desktop',         // WinForms 初探
+  devicemonitor: 'desktop',  // .NET 设备监控（真实仓库）
   teamtest: 'tool',            // Git 协作练习
   consoleapp: 'desktop',       // C# 控制台起步
   test: 'tool',                // 综合试验场

@@ -4,6 +4,7 @@
 
     <!-- 头图 -->
     <header class="article-hero">
+      <img class="hero-cover" v-show="coverReady" :src="coverSrc" :alt="project.title" @error="coverReady = false" />
       <div class="hero-inner">
         <span class="hero-status">{{ project.status }}</span>
         <h1 class="article-title">{{ project.title }}</h1>
@@ -106,6 +107,10 @@ const route = useRoute()
 const ACCENT_HUES = [250, 200, 160, 280, 25, 330, 190, 140, 300]
 
 const project = computed(() => findProject(route.params.id))
+
+// 封面：约定放在 public/projects/<id>.png；加载失败则回退到渐变占位
+const coverReady = ref(true)
+const coverSrc = computed(() => import.meta.env.BASE_URL + 'projects/' + (project.value?.id || '') + '.png')
 const idx = computed(() => projects.findIndex((p) => p.id === route.params.id))
 const prev = computed(() => (idx.value > 0 ? projects[idx.value - 1] : null))
 const next = computed(() =>
