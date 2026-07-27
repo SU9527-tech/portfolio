@@ -82,7 +82,7 @@ export const projects = [
         '**WPF 经验迁移**：主进程/渲染进程/IPC 的概念用 WPF 的 App/XAML/绑定 一类比就通了，跨框架的架构思维是可迁移的。',
       ] },
       { type: 'h2', text: '8. 总结与思考' },
-      { type: 'blockquote', text: 'Electron 不是什么新东西，就是把浏览器装进桌面壳里。你会 Vue + 懂 IPC，就已经会 70%。剩下 30% 是主进程的系统 API（文件、对话框、托盘），查文档就行。' },
+      { type: 'blockquote', text: 'Electron 不是什么新东西，就是把浏览器装进桌面壳里。会 Vue + 懂 IPC，就已经会 70%。剩下 30% 是主进程的系统 API（文件、对话框、托盘），查文档就行。' },
     ],
   },
   {
