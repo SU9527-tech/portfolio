@@ -66,7 +66,8 @@ export const projects = [
       { type: 'h3', text: '渲染进程：Vue 调用 IPC（src/App.vue）' },
       { type: 'code', lang: 'vue', code: '<script setup>\nimport { ref } from "vue"\n\nconst spectrumData = ref([])\nconst peaks = ref([])\n\n// 通过 IPC 调主进程打开文件对话框\nasync function openFile() {\n  const path = await window.electronAPI.openFile()\n  if (!path) return\n  // 加载数据...\n}\n\n// 通过 IPC 调主进程做峰值检测\nasync function findPeaks() {\n  peaks.value = await window.electronAPI.findPeaks(spectrumData.value)\n}\n</script>' },
       { type: 'h2', text: '5. IPC 数据流' },
-      { type: 'code', lang: 'text', code: '[Vue]                  [Preload]            [Electron Main]\n  electronAPI        ->  contextBridge   ->  ipcMain.handle\n    .openFile()          .exposeInMainWorld     dialog.showOpenDialog\n    .findPeaks(data)                            峰值检测算法\n                     <-  返回结果         <-  return result' },
+      { type: 'p', text: '下图展示了从 Vue 调用到主进程返回的完整 IPC 通信链路：' },
+      { type: 'img', src: 'spectrum-viewer-ipc.svg', alt: 'Electron IPC 数据流图', caption: 'IPC 通信流程：渲染进程（蓝）通过 Preload（紫）调用主进程（绿），结果沿原路返回' },
       { type: 'h2', text: '6. 功能亮点' },
       { type: 'ul', items: [
         '**模拟拉曼光谱数据**：基线 + 高斯峰 + 噪声，200 个采样点',

@@ -40,6 +40,10 @@
               <li v-for="(it, k) in s.items" :key="k" v-html="inline(it)"></li>
             </ol>
             <pre v-else-if="s.type === 'code'"><code>{{ s.code }}</code></pre>
+            <figure v-else-if="s.type === 'img'" class="article-figure">
+              <img :src="imgSrc(s)" :alt="s.alt || ''" loading="lazy" />
+              <figcaption v-if="s.caption">{{ s.caption }}</figcaption>
+            </figure>
             <blockquote v-else-if="s.type === 'blockquote'" v-html="inline(s.text)"></blockquote>
             <hr v-else-if="s.type === 'hr'" />
           </template>
@@ -111,6 +115,11 @@ const project = computed(() => findProject(route.params.id))
 // 封面：约定放在 public/projects/<id>.png；加载失败则回退到渐变占位
 const coverReady = ref(true)
 const coverSrc = computed(() => import.meta.env.BASE_URL + 'projects/' + (project.value?.id || '') + '.png')
+function imgSrc(s) {
+  // 相对路径（如 spectrum-viewer-ipc.svg）→ 拼 BASE_URL + projects/
+  if (s.src && !s.src.startsWith('http')) return import.meta.env.BASE_URL + 'projects/' + s.src
+  return s.src || ''
+}
 const idx = computed(() => projects.findIndex((p) => p.id === route.params.id))
 const prev = computed(() => (idx.value > 0 ? projects[idx.value - 1] : null))
 const next = computed(() =>
