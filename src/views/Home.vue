@@ -38,7 +38,8 @@
           <p>长期目标是靠真本事（架构、业务理解、技术深度、解决问题）走到年薪百万，不靠跳槽涨 title。</p>
         </div>
         <div class="about-skills">
-          <h3 class="skills-title">技能图谱</h3>
+          <h3 class="skills-title">能力 &amp; 技术</h3>
+          <SkillRadar />
           <TagCloud />
         </div>
       </div>
@@ -61,6 +62,7 @@
 <script setup>
 import ProjectArchive from '../components/ProjectArchive.vue'
 import TagCloud from '../components/TagCloud.vue'
+import SkillRadar from '../components/SkillRadar.vue'
 import { projects } from '../data/projects'
 
 function scrollTo(id) {
