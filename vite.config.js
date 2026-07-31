@@ -6,4 +6,17 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   base: './',
   plugins: [vue()],
+  build: {
+    rollupOptions: {
+      output: {
+        // 把 echarts 及其依赖 zrender 单独拆成独立 chunk，
+        // 避免主包超过 500KB 警告，首屏 JS 更小、加载更快。
+        manualChunks(id) {
+          if (id.includes('node_modules/echarts') || id.includes('node_modules/zrender')) {
+            return 'echarts'
+          }
+        },
+      },
+    },
+  },
 })

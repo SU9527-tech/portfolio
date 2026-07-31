@@ -18,7 +18,7 @@
 
     <!-- 卡片网格 -->
     <div class="works-grid">
-      <WorkCard v-for="p in filtered" :key="p.id" :project="p" />
+      <WorkCard v-for="p in filtered" :key="p.id" :project="p" :category="CAT_MAP[p.id] || 'tool'" />
     </div>
   </section>
 </template>
