@@ -6,7 +6,7 @@
     <header class="article-hero">
       <img class="hero-cover" v-show="coverReady" :src="coverSrc" :alt="project.title" @error="coverReady = false" />
       <div class="hero-inner">
-        <span class="hero-status">{{ project.status }}</span>
+        <span class="hero-status" :class="statusClass">{{ project.status }}</span>
         <h1 class="article-title">{{ project.title }}</h1>
         <p class="article-subtitle">{{ project.subtitle || project.excerpt }}</p>
         <div class="hero-meta">
@@ -115,6 +115,14 @@ const project = computed(() => findProject(route.params.id))
 // 封面：约定放在 public/projects/<id>.png；加载失败则回退到渐变占位
 const coverReady = ref(true)
 const coverSrc = computed(() => import.meta.env.BASE_URL + 'projects/' + (project.value?.id || '') + '.png')
+
+// 状态 → 配色（与 WorkCard 保持一致）
+const statusClass = computed(() => {
+  const s = project.value?.status || ''
+  if (s.includes('进行')) return 'st-progress'
+  if (s.includes('持续')) return 'st-ongoing'
+  return 'st-done'
+})
 function imgSrc(s) {
   // 相对路径（如 spectrum-viewer-ipc.svg）→ 拼 BASE_URL + projects/
   if (s.src && !s.src.startsWith('http')) return import.meta.env.BASE_URL + 'projects/' + s.src

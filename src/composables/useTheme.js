@@ -1,35 +1,58 @@
 import { ref } from 'vue'
 
 const STORAGE_KEY = 'lu-portfolio-theme'
-const ORDER = ['light', 'dark', 'system']
+const ORDER = ['light', 'dark']
+
+function isClient() {
+  return typeof localStorage !== 'undefined' && typeof window !== 'undefined'
+}
+
+function getSavedTheme() {
+  if (!isClient()) return null
+  try {
+    return localStorage.getItem(STORAGE_KEY)
+  } catch {
+    return null
+  }
+}
+
+function setSavedTheme(t) {
+  if (!isClient()) return
+  try {
+    localStorage.setItem(STORAGE_KEY, t)
+  } catch {}
+}
+
+// 初始化主题：兼容旧版本可能存的 'system'，若不存在则按系统偏好给一次默认值
+function initialTheme() {
+  const saved = getSavedTheme()
+  if (ORDER.includes(saved)) return saved
+  if (isClient() && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return 'dark'
+  }
+  return 'light'
+}
 
 // 模块级单例：所有组件共享同一份主题状态
-const theme = ref(localStorage.getItem(STORAGE_KEY) || 'system')
+const theme = ref(initialTheme())
 
 function apply(t) {
-  const root = document.documentElement
-  if (t === 'light' || t === 'dark') root.setAttribute('data-theme', t)
-  else root.removeAttribute('data-theme') // system：交给 CSS 的 prefers-color-scheme
+  if (typeof document !== 'undefined') {
+    document.documentElement.setAttribute('data-theme', t)
+  }
 }
 
 apply(theme.value)
 
 function setTheme(t) {
+  if (!ORDER.includes(t)) return
   theme.value = t
-  localStorage.setItem(STORAGE_KEY, t)
+  setSavedTheme(t)
   apply(t)
 }
 
 function cycleTheme() {
   setTheme(ORDER[(ORDER.indexOf(theme.value) + 1) % ORDER.length])
-}
-
-// 跟随系统：主题处于 system 时，系统偏好变化立即响应
-if (window.matchMedia) {
-  const mq = window.matchMedia('(prefers-color-scheme: dark)')
-  mq.addEventListener('change', () => {
-    if (theme.value === 'system') apply('system')
-  })
 }
 
 export function useTheme() {
