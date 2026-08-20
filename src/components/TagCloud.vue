@@ -40,7 +40,6 @@ const tags = [
   { label: 'WinForms', icon: 'W', color: 'tag-indigo',  link: 'https://learn.microsoft.com/zh-cn/dotnet/desktop/winforms/overview/' },
   { label: 'WPF',      icon: 'W', color: 'tag-teal',    link: 'https://learn.microsoft.com/zh-cn/dotnet/desktop/wpf/overview/' },
   { label: 'MES',      icon: 'M', color: 'tag-pink',    link: 'https://en.wikipedia.org/wiki/Manufacturing_execution_system' },
-  { label: 'PLC',      icon: 'P', color: 'tag-amber',   link: 'https://en.wikipedia.org/wiki/Programmable_logic_controller' },
   { label: 'DeviceMonitor', icon:'D', color: 'tag-blue', link: 'https://github.com/SU9527-tech?tab=repositories&q=device' },
   { label: 'HTML/CSS', icon: '#', color: 'tag-cyan',    link: 'https://developer.mozilla.org/zh-CN/docs/Web/CSS' },
   { label: 'DDD',      icon: 'D', color: 'tag-purple',  link: 'https://docs.microsoft.com/en-us/azure/architecture/patterns/category/domain-driven-design' },

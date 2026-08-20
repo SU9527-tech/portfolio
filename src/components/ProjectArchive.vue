@@ -18,7 +18,7 @@
 
     <!-- 卡片网格 -->
     <div class="works-grid">
-      <WorkCard v-for="p in filtered" :key="p.id" :project="p" :category="CAT_MAP[p.id] || 'tool'" />
+      <WorkCard v-for="p in filtered" :key="p.id" :project="p" />
     </div>
   </section>
 </template>
@@ -30,7 +30,7 @@ import { projects } from '../data/projects'
 
 // 项目 id → 分类。以后加了新项目，照着加一行即可（key 对应下面 CAT_LABELS）
 const CAT_MAP = {
-  shopfloor: 'fullstack',      // Vue + C# 前后端打通
+  shopfloor: 'desktop',        // WPF 车间上位机（结构示意）
   mesreport: 'backend',        // C# WebAPI 报表接口
   mbtigame: 'fullstack',       // Spring Boot 全栈毕设
   webtest: 'frontend',         // Web 基础练手
@@ -42,6 +42,8 @@ const CAT_MAP = {
   consoleapp: 'desktop',       // C# 控制台起步
   test: 'tool',                // 综合试验场
   'boke-ui-pipeline': 'tool',  // 波克竞赛作品
+  'spring-ai-rag': 'backend',  // Spring AI RAG 问答服务
+  'spectrum-viewer': 'desktop',// Electron 桌面应用
 }
 const CAT_LABELS = {
   all: '全部',

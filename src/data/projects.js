@@ -28,14 +28,14 @@
    ========================================================= */
 const GH = 'https://github.com/SU9527-tech' // 你的 GitHub 主页；如有独立仓库可替换成具体 repo 地址
 
-export const projects = [
+const _projects = [
   {
     id: 'spectrum-viewer',
     title: 'Spectrum Viewer · Electron 光谱查看器',
     date: '2026-07-26',
     status: '进行中',
     role: '前端 + Electron 桌面端',
-    subtitle: '为优谱德面试准备的 Electron + Vue 3 桌面应用 —— 模拟光谱仪配套软件',
+    subtitle: 'Electron + Vue 3 桌面应用 —— 模拟光谱仪配套软件的查看与交互',
     highlight: '用 Electron + Vue 3 搭建光谱数据查看器，跑通主进程 / 渲染进程 / IPC 完整链路。',
     github: GH,
     tags: ['Electron', 'Vue', 'Vite', '桌面应用'],
@@ -91,39 +91,39 @@ export const projects = [
     title: 'ShopFloorClient · 车间现场客户端',
     date: '2026-07-10',
     status: '进行中',
-    role: '前端 + 后端雏形',
-    subtitle: '车间工位的 Vue 客户端 —— 第一次把前端页面和 C# 后端真正连起来跑通',
-    highlight: '第一次把 Vue 前端和 C# 后端真正连起来跑通，做出车间工位的雏形。',
+    role: 'WPF 上位机（结构示意）',
+    subtitle: '车间工位客户端：扫码 → 参数下发 → 完工上报 → 标签打印（WPF / MVVM 结构示意）',
+    highlight: '按 WPF + MVVM 梳理车间上位机结构：扫码 → 参数下发 → 完工上报 → 标签打印，把现场链路跑通。',
     github: GH,
-    tags: ['Vue', 'C#', 'MES', 'Vite'],
-    excerpt: '对接 MES 的车间工位客户端雏形：Vue 写前端结构、C# 写数据交互，练手前后端联通。',
+    tags: ['C#', 'WPF', 'MVVM', 'MES'],
+    excerpt: '车间工位客户端结构梳理：WPF + MVVM + CommunityToolkit.Mvvm，对接 MES 的扫码、参数下发、完工上报链路。',
     sections: [
       { type: 'h2', text: '1. 项目背景' },
-      { type: 'p', text: '在兢美接触 **MES 业务** 后，我一直想自己动手做一个车间工位客户端：工人在工位上能看当前工单、上报产量、报异常。这个仓库是第一次把 **Vue 前端** 和 **C# 后端** 真正连起来跑通的雏形，也是我从「能看懂代码」迈向「能拼出系统」的关键一步。' },
+      { type: 'p', text: '在兢美接触 **MES 业务** 时，我参与的车间上位机（WPF）做的是「扫码 → 参数下发 → 完工上报 → 标签打印」这条现场链路。公司代码属涉密资产不能公开，这里放的是我按 **同样的业务链路和技术栈** 整理的结构示意版——不涉及任何公司源码，只展示我理解的架构与实现方式。' },
       { type: 'h2', text: '2. 技术选型与思考' },
       { type: 'ul', items: [
-        '**前端用 Vue 3 + Vite**：公司技术栈就是 Vue，练这个最贴合实际工作，学了能直接用上。',
-        '**后端用 C# WebAPI**：和前端的 Mock 数据先并行开发，后端没就绪也能先推 UI。',
-        '**通信先用 HTTP / JSON，暂不上 WebSocket**：工位刷新频率不高，先求稳，把闭环跑通比追实时更重要。',
-        '**目标环境是车间触摸屏 + 浏览器**：所以布局要够大、够清晰，适配触屏点击。',
+        '**WPF + MVVM（CommunityToolkit.Mvvm）**：View 只做展示，ViewModel 用 `[ObservableProperty]` / `[RelayCommand]` 暴露属性和命令，UI 与逻辑解耦，ViewModel 可脱离界面单测。',
+        '**本地 SQLite + Dapper**：待上报数据先落本地库，网络恢复再补传（断网续传思路）。',
+        '**HTTP API 对接 MES 后端**：工单拉取、完工上报走 REST 接口，JSON 序列化。',
+        '**Serilog 日志**：现场问题靠日志定位，按天滚动落文件。',
       ] },
-      { type: 'h2', text: '3. 核心实现' },
-      { type: 'p', text: '前端先用 `fetch` 拉工单列表，用 `v-for` 渲染成卡片；上报产量时把表单数据 POST 回后端接口。' },
-      { type: 'h3', text: '工单列表（Vue 片段）' },
-      { type: 'code', lang: 'vue', code: '<template>\n  <div class="wo-list">\n    <div class="wo-card" v-for="wo in workOrders" :key="wo.id">\n      <h3>{{ wo.code }}</h3>\n      <p>计划：{{ wo.qty }} 件 · 已完成 {{ wo.done }} 件</p>\n      <button @click="report(wo.id)">上报 +1</button>\n    </div>\n  </div>\n</template>\n\n<script setup>\nimport { ref, onMounted } from "vue";\n\nconst workOrders = ref([]);\n\nasync function load() {\n  const res = await fetch("/api/workorders");\n  workOrders.value = await res.json();\n}\n\nasync function report(id) {\n  await fetch(`/api/workorders/${id}/report`, { method: "POST" });\n  await load(); // 上报后刷新\n}\n\nonMounted(load);\n</script>' },
-      { type: 'h3', text: '后端接收（C# WebAPI 雏形）' },
-      { type: 'code', lang: 'csharp', code: '[ApiController]\n[Route("api/[controller]")]\npublic class WorkOrderController : ControllerBase\n{\n    // GET /api/workorders\n    [HttpGet]\n    public async Task<IActionResult> GetAll()\n    {\n        var list = await WorkOrderService.GetListAsync();\n        return Ok(new { code = 0, data = list });\n    }\n\n    // POST /api/workorders/{id}/report\n    [HttpPost("{id}/report")]\n    public async Task<IActionResult> Report(int id)\n    {\n        await WorkOrderService.ReportAsync(id);\n        return Ok(new { code = 0, msg = "已上报" });\n    }\n}' },
+      { type: 'h2', text: '3. 核心实现（结构示意）' },
+      { type: 'p', text: 'ViewModel 暴露「上报」命令，View 通过绑定触发；上报成功后刷新列表。以下为示意代码，非公司源码。' },
+      { type: 'h3', text: 'ViewModel：上报命令（C# 示意）' },
+      { type: 'code', lang: 'csharp', code: 'public partial class ReportViewModel : ObservableObject\n{\n    [ObservableProperty] private int _done;   // 已完成数量，变更自动通知 UI\n    private readonly IHttpApi _api;\n\n    public ReportViewModel(IHttpApi api) => _api = api;\n\n    [RelayCommand]\n    private async Task ReportAsync(int workOrderId)\n    {\n        await _api.PostAsync($"/api/workorders/{workOrderId}/report");\n        await RefreshAsync();  // 上报后刷新列表\n    }\n}' },
+      { type: 'h3', text: 'View：XAML 绑定（示意）' },
+      { type: 'code', lang: 'xml', code: '<Button Content="上报 +1"\n        Command="{Binding ReportCommand}"\n        CommandParameter="{Binding CurrentOrderId}" />\n<TextBlock Text="{Binding Done, StringFormat=已完成 {0} 件}" />' },
       { type: 'h2', text: '4. 难点与踩坑' },
       { type: 'ul', items: [
-        '**开发环境跨域**：Vite 起的 5173 访问后端 5000 端口被浏览器拦，用 Vite 的 `server.proxy` 把 `/api` 代理到后端，开发期免跨域。',
+        '**UI 线程卡顿**：设备/产量数据高频刷新时直接改 UI 会卡，用 `Dispatcher` 切回 UI 线程 + 批量合并刷新解决。',
         '**字段对不齐**：前端以为 `qty`，后端返回 `planQty`，联调半天。教训：先定一份接口字段约定（哪怕写在 README 里）。',
-        '**加载态与错误态缺失**：一开始只写了成功分支，网络一抖就白屏。后来补了 `loading / error` 两个状态。',
+        '**断网丢数据**：上报失败直接丢弃会漏产量，改为本地 SQLite 暂存 + 定时重试补传。',
       ] },
       { type: 'h2', text: '5. 阶段性成果' },
       { type: 'ul', items: [
-        '跑通「拉取工单 → 展示 → 上报 → 刷新」最小闭环',
-        '前后端联调从「完全懵」到「知道去哪查问题」',
-        '对 HTTP 请求、JSON、REST 有了肌肉记忆',
+        '梳理清楚「扫码 → 参数下发 → 完工上报 → 标签打印」的完整现场链路',
+        '理解 MVVM 的绑定与命令，ViewModel 与 View 解耦、可脱离界面测试',
+        '知道现场上位机从「拿数据」到「写回 MES」每一步去哪查问题',
       ] },
       { type: 'h2', text: '6. 总结与思考' },
       { type: 'blockquote', text: '全栈的价值不在于每端都写得多深，而在于能把一条业务线从前端点一下贯通到后端落库。先跑通闭环，再补深度。' },
@@ -153,7 +153,7 @@ export const projects = [
       { type: 'h2', text: '2. 技术选型与思考' },
       { type: 'ul', items: [
         '**ASP.NET Core WebAPI**：生态成熟、文档全，公司也用这套。',
-        '**EF Core 还是 Dapper？** 先用 EF Core 跑通，复杂报表再考虑 Dapper 手写 SQL 控性能。',
+        '**Dapper + 参数化 SQL**：报表场景查询固定、要精确控制 SQL 与索引，用 Dapper 手写 SQL 比 EF Core 的 Change Tracking 更可控、性能更好。',
         '**统一返回结构**：所有接口都返回 `{ code, data, msg }`，前端不用为每个接口写不同的解析。',
         '**Swagger**：自动生成接口文档，自己调试和给别人对接都方便。',
       ] },
@@ -167,7 +167,7 @@ export const projects = [
         '**返回结构不一致**：早期有的返回 `List`、有的返回 `object`，前端苦不堪言，后来统一成 `{ code, data, msg }`。',
       ] },
       { type: 'h2', text: '5. 收获' },
-      { type: 'p', text: '第一次认真区分了 **控制器 / 业务逻辑 / 数据访问** 三层，理解了为什么要把 SQL 关在 DAL 里不往外漏——不是为了装，是为了以后改一处不影响别处。' },
+      { type: 'p', text: '按 **DDD 四层**（Domain / Application / Infrastructure / Presentation）拆结构：控制器只管收请求，用例编排放 Application，SQL 关在 Infrastructure 的 Repository 里不往外漏——不是为了装，是为了以后改一处不影响别处。' },
       { type: 'h2', text: '6. 总结与思考' },
       { type: 'blockquote', text: '好的后端不是「能返回数据」，而是「别人接你的接口时不骂人」。统一结构、写好文档、参数化查询，这三件做好了，协作成本立刻降一半。' },
       { type: 'h2', text: '7. 后续规划' },
@@ -471,14 +471,14 @@ export const projects = [
     subtitle: '一个 .NET 桌面设备监控项目 —— 借它把 BLL / DAL / UI 三层架构和常用设计模式啃透',
     highlight: '以真实项目为样本，把三层架构、依赖注入、观察者模式一步步理清，练的是「怎么把代码写规矩」。',
     github: 'https://github.com/SU9527-tech/DeviceMonitor',
-    tags: ['.NET', 'C#', 'WPF', '架构'],
+    tags: ['.NET', 'C#', 'WinForms', '架构'],
     excerpt: '桌面设备监控练手项目：借它吃透三层架构（BLL/DAL/UI）与常用设计模式，把代码写规矩。',
     sections: [
       { type: 'h2', text: '1. 项目背景' },
       { type: 'p', text: '**DeviceMonitor** 是一个 .NET 桌面设备监控应用，也是我用来「练架构」的主战场。比起堆功能，我更看重借它把 **BLL（业务逻辑）/ DAL（数据访问）/ UI（界面）** 三层边界理清，把课堂上听到的设计模式真正用出来。' },
       { type: 'h2', text: '2. 分层结构' },
       { type: 'ul', items: [
-        '**UI 层（WPF）**：只负责展示与交互，不写业务逻辑，靠数据绑定拿数据。',
+        '**UI 层（WinForms）**：只负责展示与交互，不写业务逻辑，靠事件驱动拿数据。',
         '**BLL 层**：业务规则、状态判断、告警逻辑都收在这里，UI 和 DAL 都不该掺和。',
         '**DAL 层**：只管「怎么把数据存进去、取出来」，把 SQL / 文件细节关在里面。',
         '**Common 层**：放公共工具与模型，三层共用，避免重复。',
@@ -501,7 +501,60 @@ export const projects = [
       { type: 'blockquote', text: '分层不是炫技，是为了「改一处不影响别处」。DeviceMonitor 让我明白：写代码先想清楚边界，比先写功能更重要。' },
     ],
   },
+  {
+    id: 'spring-ai-rag',
+    title: 'SpringAI-RAG · 私域知识问答服务',
+    date: '2026-08-04',
+    status: '进行中',
+    role: '后端 + AI 应用',
+    subtitle: '基于 Spring AI 的 RAG 问答服务 —— 让大模型只回答私有文档里的内容',
+    highlight: '文档切分 → Embedding → 向量检索 → 注入 Prompt，把大模型从「闭卷」变成「开卷」，解决幻觉与知识截止问题。',
+    github: 'https://github.com/SU9527-tech/spring-ai-rag',
+    tags: ['Java', 'Spring AI', 'RAG', 'Ollama', 'Redis'],
+    excerpt: 'Spring AI + RAG：私域文档问答服务，本地 Ollama 推理 + 向量检索，让模型只基于私有知识回答。',
+    sections: [
+      { type: 'h2', text: '1. 项目背景' },
+      { type: 'p', text: '大模型有 **知识截止** 和 **幻觉** 两个硬伤：训练数据截止后不知道新知识，不确定时还会一本正经地胡说。RAG（检索增强生成）的思路是：**不重新训练模型，而是把私有文档变成可检索的上下文，提问时先检索再回答**——让模型「开卷考试」。' },
+      { type: 'h2', text: '2. 技术选型与架构' },
+      { type: 'ul', items: [
+        '**Spring AI**：Java 生态的 AI 应用框架，统一封装 Embedding / Chat 模型调用。',
+        '**Ollama 本地部署**：大模型跑在本机，不依赖云端 API，数据不出内网。',
+        '**Redis Vector**：用向量索引存文档片段，检索时按余弦相似度找 Top-K。',
+        '**文档切分**：长文档按 Token 长度切块（chunk），块间留 overlap 防止上下文断裂。',
+      ] },
+      { type: 'h2', text: '3. 核心流程' },
+      { type: 'ol', items: [
+        '入库：文档切分 → 每块做 Embedding → 存入 Redis Vector 索引',
+        '提问：用户问题同样做 Embedding → 向量检索 Top-K 相关片段',
+        '生成：把检索到的片段拼进 Prompt，交给大模型基于上下文回答',
+        '输出：回答 + 引用来源，保证每句话都有出处',
+      ] },
+      { type: 'h2', text: '4. 踩坑记录' },
+      { type: 'ul', items: [
+        '**Maven 依赖下载困难**：国内网络拉 Spring AI 相关依赖很慢，换镜像源 + 本地仓库缓存解决。',
+        '**SpEL 表达式解析报错**：Spring AI 的 PromptTemplate 里变量占位符与 SpEL 冲突，修了模板语法才跑通。',
+        '**向量检索不相关**：chunk 太大导致语义稀释，调小切分长度后命中率明显提升。',
+      ] },
+      { type: 'h2', text: '5. 价值与收获' },
+      { type: 'blockquote', text: 'RAG 的核心是「检索 + 注入上下文」，不是让模型记住知识。把文档切好、向量存好、Prompt 拼好，一套可用的私域问答就立起来了——这也正是 AI 应用落地最常见的形态。' },
+    ],
+  },
 ]
+
+// 首页展示顺序：按「求职契合度」排列，练手项目排最后（保持原相对顺序）
+const PRIORITY = {
+  devicemonitor: 0,
+  shopfloor: 1,
+  mesreport: 2,
+  mbtigame: 3,
+  'spring-ai-rag': 4,
+  'boke-ui-pipeline': 5,
+  'spectrum-viewer': 6,
+}
+export const projects = _projects
+  .map((p, i) => ({ p, i }))
+  .sort((a, b) => (PRIORITY[a.p.id] ?? 99) - (PRIORITY[b.p.id] ?? 99) || a.i - b.i)
+  .map((x) => x.p)
 
 export function findProject(id) {
   return projects.find((p) => p.id === id) || null
