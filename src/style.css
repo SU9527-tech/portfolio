@@ -599,7 +599,7 @@ a { color: inherit; text-decoration: none; }
   .hero { padding: 56px 16px 48px; }
   .hero-stats { gap: 20px; margin-top: 36px; }
   .hero-stats strong { font-size: 22px; }
-  .hero-cta .btn { flex: 1; min-width: 140px; } /* 两个按钮平分宽度 */
+  .hero-cta .btn { flex: 1; min-width: 130px; padding: 12px 14px; } /* 两个按钮平分宽度 */
   .section-head, .filter-bar, .year-group, .about-grid, .contact-card, .footer { padding-left: 16px; padding-right: 16px; }
   .card { padding: 16px 18px; }
   .card-cover { height: 130px; margin: -16px -18px 14px; } /* 与 card padding 同步 */
