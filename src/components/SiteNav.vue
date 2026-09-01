@@ -10,7 +10,7 @@
         <a class="nav-link" href="#works" @click.prevent="goSection('works')">作品</a>
         <a class="nav-link" href="#about" @click.prevent="goSection('about')">关于</a>
         <a class="nav-link" href="#contact" @click.prevent="goSection('contact')">联系</a>
-        <router-link to="/vent" class="nav-link">发泄室</router-link>
+        <router-link to="/vent" class="nav-link" @click="menuOpen = false">发泄室</router-link>
       </nav>
 
       <div class="nav-actions">
@@ -37,9 +37,19 @@ function onScroll() {
 }
 onMounted(() => {
   window.addEventListener('scroll', onScroll, { passive: true })
+  document.addEventListener('pointerdown', onOutside)
   onScroll()
 })
-onUnmounted(() => window.removeEventListener('scroll', onScroll))
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
+  document.removeEventListener('pointerdown', onOutside)
+})
+
+// 手机端：点击导航栏以外的区域关闭展开的菜单
+function onOutside(e) {
+  if (!menuOpen.value) return
+  if (!e.target.closest('.nav')) menuOpen.value = false
+}
 
 function goSection(id) {
   menuOpen.value = false

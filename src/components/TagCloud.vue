@@ -89,14 +89,15 @@ onMounted(() => {
   const W = container.clientWidth
   const H = container.clientHeight
 
-  const list = els.value || []
-  particles = list.map((el, idx) => {
-    const r = el.getBoundingClientRect()
-    const w = r.width
-    const h = r.height
-    // 用网格+随机偏移做初始散布，避免重叠
-    const cols = 3
-    const cellW = W / cols
+    const list = els.value || []
+    // 窄屏（手机）用 2 列散布，长标签才不会互相叠
+    const cols = W < 480 ? 2 : 3
+    particles = list.map((el, idx) => {
+      const r = el.getBoundingClientRect()
+      const w = r.width
+      const h = r.height
+      // 用网格+随机偏移做初始散布，避免重叠
+      const cellW = W / cols
     const cellH = H / Math.ceil(list.length / cols)
     const col = idx % cols
     const row = Math.floor(idx / cols)
